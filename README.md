@@ -14,6 +14,34 @@ Java 21 + Spring Boot transaction system template.
 - Consumer idempotency using `processed_events`
 - Flyway migrations
 
+## Main Patterns
+- Clean Architecture
+- Outbox Pattern
+- Inbox Pattern
+- Idempotency Key
+- Pessimistic Locking
+- Optimistic Versioning
+- Cache Aside
+- Eventual Consistency
+- Retry with Dead Letter Queue
+- Consumer Idempotency
+
+## Important Part:
+
+Never publish the event directly before the DB transaction commits.
+
+Instead:
+
+- DB transaction:
+   - update business tables
+   - insert outbox event
+commit
+
+- Background publisher:
+  - read outbox event
+  - publish to Kafka
+  - mark outbox event processed
+    
 ## Run infrastructure
 
 ```bash
